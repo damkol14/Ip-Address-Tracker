@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-
+  
   <!-- STYLESHEET -->
   <link rel="stylesheet" href="style.css">
 
@@ -15,9 +15,39 @@
 </head>
 
 <body>
-<div class="container">
+  <main class="ip-container">
 
-</div>
+    <h1 class='ip-header'>IP Address Tracker</h1>
+    <form class="ip-form" >
+         <input class="ip-input" type="text" placeholder="Search for any address or domain"><!-- 
+        --><button class="ip-button">
+             <img class="arrow" src="./images/icon-arrow.svg" alt="right-arrow"> 
+           </button>
+    </form>
+
+    <main class="ip-data">
+      <div>
+        <h2 class="ip-data-heading">IP ADDRESS</h2>
+        <p class="ip-data-text">192.212.174.101</p>
+      </div>
+      <div class="ip-data-styling-line">
+        <h2 class="ip-data-heading">LOCATION</h2>
+        <p class="ip-data-text">Brooklyn, NY 10001</p>
+      </div>
+      <div class="ip-data-styling-line">
+        <h2 class="ip-data-heading">TIMEZONE</h2>
+        <p class="ip-data-text">UTC -05:00</p>
+      </div>
+      <div class="ip-data-styling-line">
+        <h2 class="ip-data-heading">ISP</h2>
+        <p class="ip-data-text">SpaceX Starlink</p>
+      </div>
+    </main>
+
+  </main>
+  
+  <aside class="map"></aside>
+</main>
 
 
 <script src="./app.js"></script>
