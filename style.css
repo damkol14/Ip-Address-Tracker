@@ -24,6 +24,7 @@ body {
   max-width: 1200px;
   min-height: 250px;
   object-fit: fill;
+  z-index: 100;
 }
 
 .ip-header {
@@ -198,6 +199,7 @@ body {
   background: lightgrey;
   max-width: 1200px;
   margin: 0 auto;
+  z-index: 1;
 }
 
 @media screen and (min-width: 768px) {
