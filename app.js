@@ -1,6 +1,16 @@
+const btn = document.querySelector('.ip-button');
+const input = document.querySelector('.ip-input');
 
-// -----------------------------lattitiude----longitude
-const map = L.map('map').setView([51.4027236, 21.1471333], 13);
+const addressEl = document.querySelectorAll('.ip-data-text')[0];
+const locationEl = document.querySelectorAll('.ip-data-text')[1];
+const timezoneEl = document.querySelectorAll('.ip-data-text')[2];
+const ispEl = document.querySelectorAll('.ip-data-text')[3];
+const error = document.querySelector('.error');
+
+
+// Map 
+let map = L.map('map', { zoomControl: false }).setView([37.40599, -122.078514], 13);
+let marker = L.marker([37.40599, -122.078514]).addTo(map);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGFta29sMTQiLCJhIjoiY2wyaXhqZXlnMDlnYjNjcW5veGl6ZXFjaCJ9.Fyja32I5ZEUtC3zh5LnR5g', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -11,23 +21,85 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: 'pk.eyJ1IjoiZGFta29sMTQiLCJhIjoiY2wyaXhqZXlnMDlnYjNjcW5veGl6ZXFjaCJ9.Fyja32I5ZEUtC3zh5LnR5g'
 }).addTo(map);
 
-const marker = L.marker([51.4027236, 21.1471333]).addTo(map);
-
-console.log(map)
-
-  const amazonIp = '205.251.242.103';
-
-const amazonDataString = JSON.stringify({"ip":"205.251.242.103","location":{"country":"US","region":"Virginia","city":"South Richmond","lat":37.52237,"lng":-77.44137,"postalCode":"","timezone":"-04:00","geonameId":4786665},"domains":["amazon.com","amzn.com","apoll-new-trends.de","edu1351.info","edu1352.info"],"as":{"asn":16509,"name":"AMAZON-02","route":"205.251.240.0\/22","domain":"http:\/\/www.amazon.com","type":"Enterprise"},"isp":"Amazon Technologies Inc. (AMAZON)"});
-const amazonData = JSON.parse(amazonData);
-console.log(amazonData)
 
 
-// const axios.get('https://geo.ipify.org/api/v1', {
-//     params: {
-//       apiKey: 'at_K7lyYo6RkhFmH8vHc34ppeTlCOiYJ',
-//       ipAddress: amazonIp
-//     }
-//   })
+// Regex for checking ip v6
+const regexIpv6 = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/;
+
+// Regex for checking ip v4
+const regexIpv4 = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+
+// Regex for domain name 
+const regexDomainName = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+/;
 
 
+
+function inputValid(input) {
+  return regexIpv4.test(input) || regexIpv6.test(input) || regexDomainName.test(input)
+}
+
+function requestOnIpOrDomain(input, data) {
+  if(regexIpv4.test(input) || regexIpv6.test(input)) {
+    data.ipAddress = input;
+  };
+  if(regexDomainName.test(input)) {
+    data.domain = input;
+  };
+}
+
+function createErrOnPage(errorText) {
+      error.innerHTML = errorText;
+      error.classList.remove('not-display');
+      input.classList.add('red-border');
+}
+
+
+ 
+// When click btn take input, send request, show data on page or error
+btn.addEventListener('click', async (e) => {
+    e.preventDefault()
+    let data = {apiKey: 'at_K7lyYo6RkhFmH8vHc34ppeTlCOiYJ'};
+    let ipApiData;
+
+    if(inputValid(input.value)) {
+      // clean error on page
+      error.innerHTML = '';
+      error.classList.add('not-display');
+      input.classList.remove('red-border');
+
+      requestOnIpOrDomain(input.value, data)
+
+      // Request 
+      try {
+        ipApiData = await axios.get('https://geo.ipify.org/api/v2/country,city', {
+        params: data
+        })
+
+      } catch(err) {
+        if(err.response.status === 400) {
+          createErrOnPage('Sorry ip address or domain was not found on our servers');
+        }
+        if(err.response.status === 0) {
+          createErrOnPage('Try disable your addblock extension');
+        } 
+      }
+
+      // Showing data from request on page
+      if(ipApiData) {
+        addressEl.innerHTML = ipApiData.data.ip;
+        locationEl.innerHTML = `${ipApiData.data.location.city}, ${ipApiData.data.location.country}`;
+        timezoneEl.innerHTML = `UTC${ipApiData.data.location.timezone}`;
+        ispEl.innerHTML = ipApiData.data.isp;
+
+        map.flyTo([ipApiData.data.location.lat, ipApiData.data.location.lng], 13);
+        marker.setLatLng(new L.LatLng(ipApiData.data.location.lat, ipApiData.data.location.lng));
+      } 
+
+    } 
+
+    else {
+      createErrOnPage('Ip address or domain is not valid');
+    }
+
+})
 

@@ -15,48 +15,55 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin="" />
-    <!-- Mapscript -->
+  <!-- Mapscript -->
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
       integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
       crossorigin="">
       </script>
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   <title>IP Address Tracker</title>
 </head>
 
 <body>
-  <main class="ip-container">
 
-    <h1 class='ip-header'>IP Address Tracker</h1>
-    <form class="ip-form" >
-         <input class="ip-input" type="text" placeholder="Search for any address or domain"><!-- 
+<main class="ip-container">
+
+  <h1 class='ip-header'>IP Address Tracker</h1>
+  <form class="ip-form">
+    <input class="ip-input" type="text" placeholder="Search for any ip address or domain (facebook.com)">
+    <!-- 
         --><button class="ip-button">
-             <img class="arrow" src="./images/icon-arrow.svg" alt="right-arrow"> 
-           </button>
-    </form>
+      <img class="arrow" src="./images/icon-arrow.svg" alt="right-arrow">
+    </button>
+  </form>
+  <p class="error not-display"></p>
 
-    <main class="ip-data">
-      <div>
-        <h2 class="ip-data-heading">IP ADDRESS</h2>
-        <p class="ip-data-text">192.212.174.101</p>
-      </div>
-      <div class="ip-data-styling-line">
-        <h2 class="ip-data-heading">LOCATION</h2>
-        <p class="ip-data-text">Brooklyn, NY 10001</p>
-      </div>
-      <div class="ip-data-styling-line">
-        <h2 class="ip-data-heading">TIMEZONE</h2>
-        <p class="ip-data-text">UTC -05:00</p>
-      </div>
-      <div class="ip-data-styling-line">
-        <h2 class="ip-data-heading">ISP</h2>
-        <p class="ip-data-text">SpaceX Starlink</p>
-      </div>
-    </main>
-
+  <main class="ip-data">
+    <div>
+      <h2 class="ip-data-heading">IP ADDRESS</h2>
+      <p class="ip-data-text">8.8.8.8</p>
+    </div>
+    <div class="ip-data-styling-line">
+      <h2 class="ip-data-heading">LOCATION</h2>
+      <p class="ip-data-text">Mountain View, California</p>
+    </div>
+    <div class="ip-data-styling-line">
+      <h2 class="ip-data-heading">TIMEZONE</h2>
+      <p class="ip-data-text">UTC -07:00</p>
+    </div>
+    <div class="ip-data-styling-line">
+      <h2 class="ip-data-heading">ISP</h2>
+      <p class="ip-data-text">Google LLC</p>
+    </div>
   </main>
+
+</main>
+
+<div id="map" class="map"></div>
+
   
-  <div id="map" class="map" ></div>
 </main>
 
 
